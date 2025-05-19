@@ -1,7 +1,9 @@
 package com.lnmt.k22411csampleproject;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,16 +13,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class EmployeeManagementActivity extends AppCompatActivity {
 
-    @SuppressLint("MissingInflatedId")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_manage_employee);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setContentView(R.layout.activity_employee_management);
+
     }
+
+    public void open_employee_healthcare_activity(View view) {
+        Intent intent=new Intent(EmployeeManagementActivity.this,
+                EmployeeHealthCareActivity.class);
+        startActivity(intent);
+    }
+
 }
