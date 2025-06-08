@@ -1,5 +1,6 @@
 package com.lnmt.k22411csampleproject;
 
+import android.app.ComponentCaller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,13 +14,16 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.lnmt.connectors.CustomerConnector;
+import com.lnmt.connectors.SQLiteConnector;
 import com.lnmt.models.Customer;
+import com.lnmt.models.ListCustomer;
 
 public class CustomerManagementActivity extends AppCompatActivity {
 
@@ -42,22 +46,24 @@ public class CustomerManagementActivity extends AppCompatActivity {
     }
 
     private void addEvents() {
-        /*lvCustomer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvCustomer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Customer selected=adapter.getItem(i);
-                adapter.remove(selected);
+                /*Customer selected=adapter.getItem(i);
+                adapter.remove(selected);*/
+                Customer c=adapter.getItem(i);
+                displayCustomerDetailActivity(c);
                 return false;
             }
-        });*/
+        });
 
-        lvCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*lvCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
                 Customer c=adapter.getItem(i);
                 displayCustomerDetailActivity(c);
             }
-        });
+        });*/
     }
 
     private void displayCustomerDetailActivity(Customer c) {
@@ -72,7 +78,8 @@ public class CustomerManagementActivity extends AppCompatActivity {
         adapter=new ArrayAdapter<>(CustomerManagementActivity.this,
                 android.R.layout.simple_list_item_1);
         connector=new CustomerConnector();
-        adapter.addAll(connector.get_all_customers());
+        ListCustomer lc= connector.getAllCustomers(new SQLiteConnector(this).openDatabase());
+        adapter.addAll(lc.getCustomers());
         lvCustomer.setAdapter(adapter);
     }
 
@@ -92,7 +99,9 @@ public class CustomerManagementActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(CustomerManagementActivity.this,
                     CustomerDetailActivity.class);
-            startActivity(intent);
+            //đóng gói và đặt mã request code là 300
+            startActivityForResult(intent, 300);
+            //startActivity(intent);
         }
         else if(item.getItemId()==R.id.menu_broadcast_advertising)
         {
@@ -108,4 +117,34 @@ public class CustomerManagementActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            //trường hợp xử lý cho NEW CUSTOMER chỉ quan tâm 300 và 500 do ta định nghĩa:
+            if (requestCode==300 && resultCode==500)
+            {
+                //lấy go tin r:
+                Customer c=(Customer) data.getSerializableExtra("NEW_CUSTOMER");
+                process_save_customer(c);
+            }
+        }
+
+        private void process_save_customer(Customer c) {
+            boolean result=connector.isExit(c);
+            if (result==true)
+            {
+                //tức là customer này đã tồn tại trong hệ thống
+                //họ có nhu cầu sửa các thông tin khác, ví dụ:
+                //địa chỉ, payment...
+                //******SINH VIÊN TỰ XỬ LÝ TRƯỜNG HỢP SỬA THÔNG TIN******
+            }
+            else
+            {
+                //là thêm mới Customer vì chưa tồn tại
+                connector.addCustomer(c);
+                adapter.clear();
+                adapter.addAll(connector.get_all_customers());
+            }
+        }
 }

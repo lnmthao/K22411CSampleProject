@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
     TextView txtCustomer;
     ImageView imgProduct;
     TextView txtProduct;
+    ImageView imgAdvancedProduct;
+    TextView txtAdvancedProduct;
+    ImageView imgPaymentMethod;
+    TextView txtPaymentMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imgAdvancedProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAdvancedProductManagementActivity();
+            }
+        });
+        txtAdvancedProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAdvancedProductManagementActivity();
+            }
+        });
+
+        imgPaymentMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPaymentMethodActivity();
+            }
+        });
+        txtPaymentMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPaymentMethodActivity();
+            }
+        });
+
+    }
+
+    private void openPaymentMethodActivity() {
+        Intent intent=new Intent(MainActivity.this, PaymentMethodActivity.class);
+        startActivity(intent);
+    }
+
+    private void openAdvancedProductManagementActivity() {
+        Intent intent=new Intent(MainActivity.this, AdvancedProductManagementActivity.class);
+        startActivity(intent);
     }
 
     private void openProductManagementActivity() {
@@ -105,5 +145,9 @@ public class MainActivity extends AppCompatActivity {
         txtCustomer=findViewById(R.id.txtCustomer);
         imgProduct=findViewById(R.id.imgProduct);
         txtProduct=findViewById(R.id.txtProduct);
+        imgAdvancedProduct=findViewById(R.id.imgAdvancedProduct);
+        txtAdvancedProduct=findViewById(R.id.txtAdvancedProduct);
+        imgPaymentMethod=findViewById(R.id.imgPaymentMethod);
+        txtPaymentMethod=findViewById(R.id.txtPaymentMethod);
     }
 }
