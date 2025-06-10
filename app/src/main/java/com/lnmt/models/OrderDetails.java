@@ -1,6 +1,6 @@
 package com.lnmt.models;
 
-public class OrderDetail {
+public class OrderDetails {
     private int Id;
     private int OrderID;
     private int ProductId;
@@ -10,7 +10,7 @@ public class OrderDetail {
     private double VAT;
     private double TotalValue;
 
-    public OrderDetail() {
+    public OrderDetails() {
     }
 
     public int getId() {
