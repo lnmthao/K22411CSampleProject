@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_viettel"
+        android:enabled="true"
+        android:visible="true"
+        android:title="@string/title_select_viettel"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_mobiphone"
+        android:enabled="true"
+        android:visible="true"
+        android:title="@string/title_select_mobifone"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_others"
+        android:enabled="true"
+        android:visible="true"
+        android:title="@string/title_select_others"
+        app:showAsAction="always" />
+
+</menu>

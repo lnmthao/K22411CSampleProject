@@ -1,7 +1,9 @@
 package com.lnmt.k22411csampleproject;
 
 import android.app.ComponentCaller;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,7 +72,8 @@ public class CustomerManagementActivity extends AppCompatActivity {
         Intent intent=new Intent(CustomerManagementActivity.this,
                 CustomerDetailActivity.class);
         intent.putExtra("SELECTED_CUSTOMER",c);
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent,400);
     }
 
     private void addViews() {
@@ -124,27 +127,77 @@ public class CustomerManagementActivity extends AppCompatActivity {
             //trường hợp xử lý cho NEW CUSTOMER chỉ quan tâm 300 và 500 do ta định nghĩa:
             if (requestCode==300 && resultCode==500)
             {
-                //lấy go tin r:
+                //lấy go tin ra:
                 Customer c=(Customer) data.getSerializableExtra("NEW_CUSTOMER");
                 process_save_customer(c);
             }
+            else if(requestCode==400 && resultCode==500)
+            {
+                //Cập nhật dữ liệu cho Customer
+                //LÀM SAU
+                //lấy go tin ra:
+                Customer c=(Customer) data.getSerializableExtra("NEW_CUSTOMER");
+                process_save_update_customer(c);
+            }
+            else if(requestCode==400 && resultCode==600)
+            {
+                String id=data.getStringExtra("CUSTOMER_ID_REMOVE");
+                process_remove_customer(id);
+
+            }
         }
 
-        private void process_save_customer(Customer c) {
-            boolean result=connector.isExit(c);
-            if (result==true)
+    private void process_remove_customer(String id) {
+        SQLiteConnector con=new SQLiteConnector(this);
+        SQLiteDatabase database=con.openDatabase();
+        CustomerConnector cc=new CustomerConnector();
+        long flag=cc.removeCustomer(id, database);
+        Toast.makeText(this, "FLAG="+flag, Toast.LENGTH_LONG).show();
+        if(flag>0)
+        {
+            adapter.clear();
+            adapter.addAll(cc.getAllCustomers(database).getCustomers());
+        }
+    }
+
+    private void process_save_update_customer(Customer c) {
+        SQLiteConnector con=new SQLiteConnector(this);
+        SQLiteDatabase database=con.openDatabase();
+        CustomerConnector cc=new CustomerConnector();
+        long flag=cc.saveUpdateCustomer(c, database);
+        if(flag>0)
+        {
+            adapter.clear();
+            adapter.addAll(cc.getAllCustomers(database).getCustomers());
+        }
+    }
+
+    private void process_save_customer(Customer c) {
+            SQLiteConnector con=new SQLiteConnector(this);
+            SQLiteDatabase database=con.openDatabase();
+            CustomerConnector cc=new CustomerConnector();
+            long flag=cc.saveNewCustomer(c, database);
+            Toast.makeText(this, "FLAG="+flag, Toast.LENGTH_LONG).show();
+            if(flag>0)
             {
-                //tức là customer này đã tồn tại trong hệ thống
-                //họ có nhu cầu sửa các thông tin khác, ví dụ:
-                //địa chỉ, payment...
-                //******SINH VIÊN TỰ XỬ LÝ TRƯỜNG HỢP SỬA THÔNG TIN******
-            }
-            else
-            {
-                //là thêm mới Customer vì chưa tồn tại
-                connector.addCustomer(c);
                 adapter.clear();
-                adapter.addAll(connector.get_all_customers());
+                adapter.addAll(cc.getAllCustomers(database).getCustomers());
             }
+
+//            boolean result=connector.isExit(c);
+//            if (result==true)
+//            {
+//                //tức là customer này đã tồn tại trong hệ thống
+//                //họ có nhu cầu sửa các thông tin khác, ví dụ:
+//                //địa chỉ, payment...
+//                //******SINH VIÊN TỰ XỬ LÝ TRƯỜNG HỢP SỬA THÔNG TIN******
+//            }
+//            else
+//            {
+//                //là thêm mới Customer vì chưa tồn tại
+//                connector.addCustomer(c);
+//                adapter.clear();
+//                adapter.addAll(connector.get_all_customers());
+
         }
 }

@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imgOrder;
     TextView txtOrder;
+    ImageView imgTelephony;
+    TextView txtTelephony;
+    ImageView imgMultiThreading;
+    TextView txtMultiThreading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +130,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imgTelephony.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTelephonyActivity();
+
+            }
+        });
+
+        txtTelephony.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTelephonyActivity();
+
+            }
+        });
+
+        imgMultiThreading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMultiThreadingActivity();
+
+            }
+        });
+
+        txtMultiThreading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMultiThreadingActivity();
+
+            }
+        });
+
+    }
+
+    private void openMultiThreadingActivity() {
+        Intent intent=new Intent(MainActivity.this, MultiThreadingCategoriesActivity.class);
+        startActivity(intent);
+    }
+
+    private void openTelephonyActivity() {
+        Intent intent=new Intent(MainActivity.this, TelephonyActivity.class);
+        startActivity(intent);
     }
 
     private void openOrdersViewerActivity() {
@@ -172,5 +218,9 @@ public class MainActivity extends AppCompatActivity {
         txtPaymentMethod=findViewById(R.id.txtPaymentMethod);
         imgOrder=findViewById(R.id.imgOrder);
         txtOrder=findViewById(R.id.txtOrder);
+        imgTelephony=findViewById(R.id.imgTelephony);
+        txtTelephony=findViewById(R.id.txtTelephony);
+        imgMultiThreading=findViewById(R.id.imgMultiThreading);
+        txtMultiThreading=findViewById(R.id.txtMultiThreading);
     }
 }

@@ -1,15 +1,23 @@
 package com.lnmt.k22411csampleproject;
 
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +46,13 @@ public class LoginActivity extends AppCompatActivity {
     String DATABASE_NAME="SalesDatabase.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
+    BroadcastReceiver networkReceiver=null;
+    Button btnLogin;
+
+    TextView txtNetworkType;
+
+    View mainLayout;
+
 
     private long lastBackPressedTime = 0;
     private static final long BACK_PRESS_THRESHOLD = 500;
@@ -55,12 +70,64 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         processCopy();
+
+        setupBroadcastReceiver();
+    }
+
+    private void setupBroadcastReceiver() {
+        networkReceiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //chút nưa sẽ tự động nhảy vào đây khi
+                //Internet bị thay đổi trạng thái
+                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                if(networkInfo != null && networkInfo.isConnected())
+                { //vào đây tức là có internet (không quan tâm wifi hay 4g)
+                    btnLogin.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    btnLogin.setVisibility(View.INVISIBLE);
+                }
+
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                        // Chỉ thay đổi màu văn bản cho Wi-Fi
+                        txtNetworkType.setText("Kết nối Wi-Fi");
+                        txtNetworkType.setTextColor(Color.parseColor("#03A9F4"));  // Màu xanh da trời (Wi-Fi)
+
+                        // Thay đổi màu nền khi kết nối Wi-Fi
+                        mainLayout.setBackgroundColor(Color.parseColor("#BBDEFB"));  // Màu nền xanh dương nhạt (Wi-Fi)
+                    } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        // Chỉ thay đổi màu văn bản cho Mobile Data
+                        txtNetworkType.setText("Kết nối Dữ liệu di động");
+                        txtNetworkType.setTextColor(Color.parseColor("#4CAF50"));  // Màu xanh lá cây (Mobile Data)
+
+                        // Thay đổi màu nền khi kết nối Mobile Data
+                        mainLayout.setBackgroundColor(Color.parseColor("#C8E6C9"));  // Màu nền xanh lá cây nhạt (Mobile Data)
+                    }
+                } else {
+                    // Thay đổi màu văn bản khi không có kết nối
+                    txtNetworkType.setText("Không có kết nối Internet");
+                    txtNetworkType.setTextColor(Color.parseColor("#9E9E9E"));  // Màu xám (Không có kết nối)
+
+                    // Thay đổi màu nền khi không có kết nối
+                    mainLayout.setBackgroundColor(Color.parseColor("#B0BEC5"));  // Màu nền xám (Không có kết nối)
+                }
+
+
+            }
+        };
     }
 
     private void addViews() {
         edtUserName=findViewById(R.id.edtUserName);
         edtPassword=findViewById(R.id.edtPassword);
         chkSaveLogin=findViewById(R.id.chkSaveLoginInfor);
+        btnLogin=findViewById(R.id.btnLogin);
+        txtNetworkType = findViewById(R.id.txtNetworkType);
+        mainLayout = findViewById(R.id.main);
     }
 
     public void do_login(View view) {
@@ -145,6 +212,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         saveLoginInformation();
+        if(networkReceiver!=null)
+        {
+            unregisterReceiver(networkReceiver);
+        }
     }
 
     public void restoreLoginInformation()
@@ -165,6 +236,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         restoreLoginInformation();
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkReceiver, filter);
     }
 
     private void processCopy() {
