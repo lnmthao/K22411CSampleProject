@@ -37,4 +37,11 @@ public class MultiThreadingCategoriesActivity extends AppCompatActivity {
                 HandlerPostMessageActivity.class);
         startActivity(intent);
     }
+
+    public void openAsyncTaskActivity(View view) {
+        Intent intent = new Intent(
+                MultiThreadingCategoriesActivity.this,
+                AsyncTaskActivity.class);
+        startActivity(intent);
+    }
 }

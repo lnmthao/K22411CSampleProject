@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     TextView txtTelephony;
     ImageView imgMultiThreading;
     TextView txtMultiThreading;
+    ImageView imgLearnFirebase;
+    TextView txtLearnFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +164,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imgLearnFirebase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLearnFirebaseActivity();
+
+            }
+        });
+
+        txtLearnFirebase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLearnFirebaseActivity();
+
+            }
+        });
+
+    }
+
+    private void openLearnFirebaseActivity() {
+        Intent intent=new Intent(MainActivity.this, LearnFirebaseActivity.class);
+        startActivity(intent);
     }
 
     private void openMultiThreadingActivity() {
@@ -222,5 +245,7 @@ public class MainActivity extends AppCompatActivity {
         txtTelephony=findViewById(R.id.txtTelephony);
         imgMultiThreading=findViewById(R.id.imgMultiThreading);
         txtMultiThreading=findViewById(R.id.txtMultiThreading);
+        imgLearnFirebase=findViewById(R.id.imgLearnFirebase);
+        txtLearnFirebase=findViewById(R.id.txtLearnFirebase);
     }
 }

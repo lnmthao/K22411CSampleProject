@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Id:" />
+
+    <EditText
+        android:id="@+id/edtContactId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contact Id here" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:" />
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name here" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:" />
+
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email here"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone:" />
+
+    <EditText
+        android:id="@+id/edtPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone here"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/btnInsert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insert Contact"
+        android:backgroundTint="#7B4BFF"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
